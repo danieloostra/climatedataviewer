@@ -1,9 +1,9 @@
 
-#Climate DATA Viewer(CDV)  - Data Viz
+#Climate DATA Viewer(CDV)  - Data Viz 
 
 ##Why support this project?
 
-The goal for this repository is to open the CDV to the world via GitHub, to help us create the ultimate data visualization tool that our scientists, educators, friends and families can connect with the hundreds of petabytes of data that are provided freely by science teams at NASA, NOAA, CDC, NWS without politics or strings attached.
+The goal for this repository is to open the CDV to the world via GitHub, to help create the ultimate data visualization tool that our scientists, educators, friends and families can connect with the hundreds of petabytes of data that are provided freely by science teams at NASA, NOAA, CDC, NWS, and science institutions without politics or strings attached.
 
 ##What does this software already do?
 
