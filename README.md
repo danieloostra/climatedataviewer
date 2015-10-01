@@ -67,6 +67,6 @@ Feel free to <a href="mailto:danoostra@gmail.com">email me</a> privately or post
 ####Please refer to the home page of the Live Access Server for more technical information and NOAA PMEL releases.
 <a href="http://ferret.pmel.noaa.gov/LAS/home" target="_blank">
 
-####Disclaimer: This repository is not officially affiliated with NOAA PMEL, NASA, NWS or any of the agencies named or implied within this repository. It was uploaded under the open source license detailed within the LICENSE.md file located in the main directory for the CDV as requested by the original authors.
+####Disclaimer: This repository is not officially affiliated with NOAA PMEL, NASA, NWS or any of the agencies named or implied within this repository. It was contributed under the open source license detailed within the LICENSE.md file located in the main directory for the CDV as requested by the original authors.
 
 #####Please note: This software and documentation referred to are in the public domain and are furnished "as is." The original or current authors, maintainers, editors, or contributors assume no responsibility for the use of this software.
