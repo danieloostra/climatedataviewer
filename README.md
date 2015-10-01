@@ -65,8 +65,7 @@ That's it. Now remember the full path name of the directory where you installed 
 Feel free to <a href="mailto:danoostra@gmail.com">email me</a> privately or post to your thoughts on this project. I've been a user of this software for many years, I'm not an expert at application security, but making this software bulletproof will allow students from around the world access research quality data. Our team would like to use this software to make data accessible for teachers to expand their student's understanding and experiences in the areas of Earth science, math, engineering, and above all, insights into the world around them. 
 
 ####Please refer to the home page of the Live Access Server for more technical information and NOAA PMEL releases.
-<a href="http://ferret.pmel.noaa.gov/LAS/home" target="_blank">
-
+<a href="http://ferret.pmel.noaa.gov/LAS/home" target="_blank">Live Access Server Home</a>
 
 Thought I should add this:
 ####Disclaimer: This repository is not officially affiliated with NOAA PMEL, NASA, NWS or any of the agencies named or implied within this repository. It was contributed under the open source license detailed within the LICENSE.md file located in the main directory for the CDV as requested by the original authors.
