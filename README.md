@@ -49,7 +49,7 @@ The Climate Data Viewer was originally developed by the dedicated staff at the P
 That's it. Now remember the full path name of the directory where you installed your tomcat and the port number you selected for the HTTP Connector port. You'll need these in the LAS configure process.</li></ol>
 ###Install the THREDDS Data Server
 ####This is not hard, but there are a lot of steps you need to follow.
-<p>Because of all the details needed to integrate TDS and LAS we've created <a title="Installing and integrating TDS with LAS." href="installing-and-integrating-tds-with-las">a separate page with instructions</a>.</p>
+<p>Because of all the details needed to integrate TDS and LAS we've created <a title="Installing and integrating TDS with LAS." href="https://github.com/danieloostra/climatedataviewer/wiki/More-Details-on-Installing-the-THREDDS-Data-Server">a separate page with instructions</a>.</p>
 
 ###Install Ant 1.8+
 <h3>This is very easy. The promise of "write once install anywhere in action".</h3>
