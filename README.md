@@ -61,3 +61,12 @@ That's it. Now remember the full path name of the directory where you installed 
 <li>You also need to install the etopo05.nc data set in your FER_DATA directory since this version of LAS depends on this file for computing masks for user defined variables. The example configuration also includes a new dataset, ocean_atlas_subset.nc, a 4-Dimensional dataset for demonstrating LAS capabilities. Both of these files are in the Ferret datasets tar file listed on the Ferret downloads pages. Download the Ferret datasets tar file and install the data to update your installation.</li></ol>
 
 
+##Further Questions? Insights? We need your help!
+Feel free to <a href="mailto:danoostra@gmail.com">email me</a> privately or post to your thoughts on this project. I've been a user of this software for many years, I'm not an expert at application security, but making this software bulletproof will allow students from around the world access research quality data. Our team would like to be able to continue to use this software to make data accessible to for teachers to expand their understanding in the areas of Earth science, math, engineering, and emerging technologies. 
+
+####Please refer to the home page of the Live Access Server for more technical information and NOAA PMEL releases.
+<a href="http://ferret.pmel.noaa.gov/LAS/home" target="_blank">
+
+####Disclaimer: This repository is not officially affiliated with NOAA PMEL, NASA, NWS or any of the agencies named or implied within this repository. It was uploaded under the open source licensed detailed within the LICENSE.md file located in the main github page for this software. 
+
+#####Please note: This software and documentation referred to are in the public domain and are furnished "as is." The original or current authors, maintainers, editors, or contributors assume no responsibility for the use of this software.
