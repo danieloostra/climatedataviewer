@@ -5,6 +5,8 @@
 
 The goal for this repository is to open the CDV to the world via GitHub, to help create the ultimate data visualization tool that our scientists, educators, friends and families can use to connect with the hundreds of petabytes of data that are provided freely by science teams at NASA, NOAA, CDC, NWS, and science institutions without politics or strings attached.
 
+By supporting and working on this project, you'll be contributing to the efforts of literally thousands of man-hours spent to make data viz on the web an afterthought. The real power lies within the insights and "ah-ha" moments we can create in the Earth science students around the world. Think about this: Why are we so tuned into the weather? Well, it's always available and interpereted for us--24/7... What's needed in the media and in our daily lives is a comprehensive understanding of our climates and how they affect our environments that we rely and hope to be predictable. Let's put climate data on the web.
+
 ##What does this software already do?
 
 The Climate Data Viewer (CDV) is a web server that can be configured to allow users to access climate and Earth science data. The CDV uses DODs networking to enable data users to view distributed datasets in one viewer, or host data locally. The CDV uses the Ferret visualization engine to visualize data within the CDV, however, other applications such as Matlab, IDL, GrADS can also be used within the CDV as it currently stands.
