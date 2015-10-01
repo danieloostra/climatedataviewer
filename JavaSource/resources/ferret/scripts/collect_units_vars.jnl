@@ -1,0 +1,56 @@
+! Build up plot_vars_n symbols, with sets of variables
+! that have common units.
+
+! comma between variables
+CANCEL SYMBOL comma
+IF `($m) eq 1` THEN DEFINE SYMBOL comma = ,
+
+! symbol containing the units, in a form that can be used
+! to define a symbol to mark that these units have been done.
+! Remove various special characters from this internally-used string.
+
+PPL SET inunits_collapse $EDIT(in_units,COLLAPSE)
+DEFINE SYMBOL inunits_up `UPCASE("($inunits_collapse)")`
+
+IF `($n_ustrings"0|*>1") EQ 0` THEN 
+   DEFINE SYMBOL n_ustrings = 1
+   DEFINE SYMBOL ustring_($n_ustrings) = ($inunits_up)
+ENDIF
+
+! If we already have a set of vars with these units then we are done
+IF ($done_($n_ustrings)"0|*>1") THEN
+   EXIT/SCRIPT
+ENDIF
+
+LET new_string = 1
+REPEAT/RANGE=1:($n_ustrings)/NAME=g (\
+   DEFINE SYMBOL g = `g`;\
+   sh sym n_ustrings, ustring_($g);\
+   IF `STRCMP("($inunits_up)", "($ustring_($g))") EQ 0` THEN LET new_string = 0;\
+   IF `STRCMP("($inunits_up)", "($ustring_($g))") EQ 0` THEN EXIT/LOOP;\
+)
+
+IF `new_string EQ 0` THEN 
+   EXIT/SCRIPT
+ELSE
+
+! Mark this units string as being done and prepare for the next one
+   DEFINE SYMBOL done_($n_ustrings) = 1
+   DEFINE SYMBOL n_ustrings = `($n_ustrings)+1`
+   DEFINE SYMBOL ustring_($n_ustrings) = ($inunits_up)   
+   DEFINE SYMBOL iplot = `($iplot) + 1`
+   DEFINE SYMBOL group_label_($iplot) = ($in_units)
+ENDIF
+
+! For this units string, collect the variables.
+REPEAT/RANGE=1:`($data_count)-1`/NAME=g (\
+   DEFINE SYMBOL g = `g`;\
+   DEFINE SYMBOL gg = `g-1`;\
+   DEFINE SYMBOL this_units = `UPCASE("($data_($g)_units)")`; \
+   LET match_units = `STRCMP("($this_units)", "($in_units)") EQ 0`; \
+   IF `match_units` THEN DEFINE SYMBOL plot_vars_($iplot) = ($plot_vars_($iplot))($comma) ($ferret_plot_var_($g));\
+   IF `match_units` THEN DEFINE SYMBOL comma = , ;\
+   IF `match_units` THEN DEFINE SYMBOL group_label_($iplot) = ($data_($g)_units) \
+ )
+
+!  ----------------- End of collect_units_var.jnl ------------------------------------

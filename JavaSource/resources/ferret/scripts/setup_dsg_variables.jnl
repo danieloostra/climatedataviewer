@@ -1,0 +1,97 @@
+! setup_dsg_variables.jnl
+!
+! Redefine data_var, data_x_var, data_y_var
+! * Insert gaps between cruises
+! * Fix longitudes crossing the dateline.
+! See piecewise_linear_decimation.jnl which calls this script 
+! and computes piecewise linear decimation
+!
+
+IF `($rowvar"0|*>1") EQ 0` THEN EXIT/SCRIPT
+
+IF `($data_var_in"0|*>1") EQ 0` THEN DEFINE SYMBOL data_var_in = ($data_var)
+IF `($data_x_var_in"0|*>1") EQ 0` THEN DEFINE SYMBOL data_x_var_in = ($data_x_var)
+IF `($data_y_var_in"0|*>1") EQ 0` THEN DEFINE SYMBOL data_y_var_in = ($data_y_var)
+IF `($data_t_var_in"0|*>1") EQ 0` THEN DEFINE SYMBOL data_t_var_in = ($data_t_var)
+
+DEFINE SYMBOL nfeatures = `($rowvar),RETURN=msize`
+
+
+IF ($nfeatures"0|*>1") THEN 
+   LET mmax = `($rowvar)[m=1:($nfeatures)@sum]` ! 1st m cruises
+   LET npts = mmax
+ELSE
+   LET npts = `($data_var),RETURN=isize`
+ENDIF
+
+! Check data type
+
+LET gettype = ($data_var)
+DEFINE SYMBOL vtype = `gettype,RETURN=dtype`
+DEFINE SYMBOL is_string = ($vtype"0|CHAR>1|*>0")
+
+! Replace the last datum in each trajectory with the bad-value.
+! For the longitudes, also fix the crossings of the dateline.
+
+LET lon_with_gaps = ($data_x_var)
+LET lat_with_gaps = ($data_y_var)
+LET time_with_gaps = ($data_t_var)
+LET var_with_gaps = ($data_var)
+
+! Function separate puts gaps between cruises and also removes jumps in longitude
+! where it crosses the dateline. Set ngood and nbad before adding these gaps.
+! Prop-prop plots compute ngood elsewhere, taking into account constraints.
+
+IF `($its_prop_plot"0|0|1|*>1") EQ 0` THEN
+   IF `($is_string"0") NE 1` THEN 
+      STAT ($data_var)
+      DEFINE SYMBOL ngood_data = ($stat_ngood)
+      DEFINE SYMBOL nbad_data = ($stat_nbad)
+   ELSE
+      DEFINE SYMBOL ngood_data = `($data_var)[i=@ngd]`
+      DEFINE SYMBOL nbad_data = `($numobs) - ($ngood_data)`
+   ENDIF
+ENDIF
+
+!IF `($nfeatures"0") GT 1` THEN 
+
+DEFINE SYMBOL n_gaps = `($nfeatures) - 1`
+
+IF ($data_x_is_lon"0|*>1") THEN
+   LET/units="`($data_x_var),return=units`" lon_with_gaps = SEPARATE(($data_x_var)[i=1:`npts`], ($rowvar), 1)
+ELSE
+   LET/units="`($data_x_var),return=units`" lon_with_gaps = SEPARATE(($data_x_var)[i=1:`npts`], ($rowvar), 0)
+ENDIF
+
+LET/units="`($data_y_var),return=units`" lat_with_gaps = SEPARATE(($data_y_var)[i=1:`npts`], ($rowvar), 0)   
+LET/units="`($data_t_var),return=units`" time_with_gaps = SEPARATE(($data_t_var)[i=1:`npts`], ($rowvar), 0)
+
+LET/units="`($data_var),return=units`" var_with_gaps = SEPARATE(($data_var)[i=1:`npts`], ($rowvar), 0)   
+IF ($is_string) THEN LET/units="`($data_var),return=units`" var_with_gaps = SEPARATE_STR(($data_var)[i=1:`npts`], ($rowvar), 0)
+
+LET npts = `lat_with_gaps,RETURN=isize`
+
+DEFINE SYMBOL data_var = var_with_gaps
+DEFINE SYMBOL data_x_var = lon_with_gaps
+DEFINE SYMBOL data_y_var = lat_with_gaps
+!DEFINE SYMBOL data_t_var = time_with_gaps
+
+!ENDIF ! nfeatures GT 1
+
+LET nout_lonlat = `($data_var)[i=@ngd]`
+DEFINE SYMBOL nout_lonlat = `nout_lonlat` 
+
+! Is the data pre-decimated?  If so set up things for the annotations and exit.
+
+LET global_attnames = ..attnames
+IF `IS_ELEMENT_OF_STR(global_attnames, "decimation") GT 0` THEN
+
+   DEFINE SYMBOL decimation_fraction = ($ferret_decimation_fraction"0.03257")
+   DEFINE SYMBOL piecewise_decimation = 1
+   LET ngood_sampled = `($ngood_data)`
+   EXIT/SCRIPT
+ENDIF
+
+! End of file ------------ setup_dsg_variables.jnl--------------------------
+
+

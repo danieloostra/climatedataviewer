@@ -1,0 +1,10 @@
+K 10
+svn:ignore
+V 10
+log4j.xml
+
+K 13
+svn:mergeinfo
+V 42
+/baker/tags/v8-beta/JavaSource:14629-14635
+END

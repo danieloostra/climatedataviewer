@@ -1,0 +1,19 @@
+K 10
+svn:ignore
+V 52
+info_tmp.vm
+revision.vm
+svn.vm
+
+.project
+
+.settings
+
+K 13
+svn:mergeinfo
+V 325
+/baker/branches/v8-downloaddata-dialog-gwttime/WebContent/productserver/templates:13580-13735
+/baker/branches/v8-downloaddata-dialog/WebContent/productserver/templates:13434-13579
+/baker/tags/las-esg-v7.3.1/WebContent/productserver/templates:12038-12042
+/baker/tags/las-esg-v7.3/WebContent/productserver/templates:11849-12037
+END

@@ -1,0 +1,118 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! $Header$
+! feature_labels.jnl
+!
+! Add to annotations the upper right with number of trajectories or profiles
+! and number of valid and missing points shown.
+! On prop-prop plots, don't show missing. The count of missing-values in the
+! data is not distinguishable from the missing data due to applying constraints. 
+
+! If all labeling turned off just exit.
+IF `($ferret_label"1|0|1|*>1") EQ 0` THEN EXIT/SCRIPT
+
+! If it is not a feature-type dataset, exit
+IF `($feature_type"0|*>1") EQ 0` THEN EXIT/SCRIPT
+
+LET check_var = $1%XSEQUENCE(($ferret_plot_var))%
+DEFINE SYMBOL vtype = `check_var,return=dtype`
+IF ($vtype"0|char>1|*>0) THEN LET check_var = ($ferret_plot_var_2)
+
+! Fill with a known value to distinguish between input missing values
+! and values missing because of the different length of trajectories or profiles.
+
+! Define variable prof_traj by trajectory or profile length
+! Count number of good and missing values in each.
+
+LET datmax = check_var[I=@max]
+IF `(MISSING(datmax,100) EQ 100)  AND (MISSING(datmax,10) EQ 10)` THEN LET datmax = 0  
+
+IF `datmax LE 1` THEN
+   LET fillval = 100
+ELSE
+   LET fillval =  `10^(INT(LOG(datmax))+1)`
+ENDIF
+
+LET var_fill = MISSING(check_var,`fillval`)
+LET var_fill_z =  EXPNDI_BY_Z_COUNTS(var_fill, XSEQUENCE(($rowvar)),`longest`)
+
+LET var_flag_z = IF var_fill_z EQ `fillval` THEN 1
+LET nbad_in_prof_traj =  var_flag_z[K=@NGD]
+LET ngood_in_prof_traj = var_fill_z[K=@NGD] - var_flag_z[K=@NGD]
+
+LET trajectory_mask = 1
+IF ($text_mask_trajectory"0|*>1") THEN 
+   LET trajectory_mask = XSEQUENCE(($text_mask_trajectory))
+ELSE
+   IF `IS_ELEMENT_OF_STR_N(varnames, "($feature_variable)") NE 0` THEN 
+      LET trajectory_m = 1+0*_m[ge=($feature_variable)]
+      LET trajectory_mask =  XSEQUENCE(trajectory_m)
+   ENDIF
+ENDIF
+
+LET ngood_chosen_prof_traj = subset_mask* trajectory_mask* ngood_in_prof_traj
+LET nbad_chosen_prof_traj = subset_mask* trajectory_mask*  nbad_in_prof_traj
+
+! Just compute one of these, and subtract from the total in dataset
+
+IF `($ngood_data"0|*>1") EQ 0` THEN 
+   IF `($ferret_memory"25.6") LT 700` THEN SET MEM/SIZ=700
+   LET allsize = `check_var,RETURN=isize`
+   DEFINE SYMBOL nbad_data = `nbad_chosen_prof_traj[i=@SUM]`
+   DEFINE SYMBOL ngood_data = `allsize - ($nbad_data)`
+ENDIF
+
+LET allvars = ..varnames
+
+DEFINE SYMBOL maskdir =  `feature_mask,return=shape`
+IF ($maskdir"0|POINT>1|*>0") THEN 
+   DEFINE SYMBOL prof_traj_shown = 1
+ELSE
+   IF ($prof_traj_shown"1|*>0") THEN DEFINE SYMBOL prof_traj_shown = `feature_mask[($maskdir)=@sum]`
+   DEFINE SYMBOL prof_traj_shown = ($prof_traj_shown"($prof_traj_max)")
+ENDIF
+
+! c_s used to add plural s to a label if more than one trajectory or profile.
+CANCEL SYMBOL c_s
+IF `($prof_traj_shown"0") GT 1` THEN DEFINE SYMBOL c_s = s
+IF `($c_s"0|*>1") AND ($feature_type"0|trajectory>1|*>0")` THEN\
+ DEFINE SYMBOL feature_type = trajectorie
+
+DEFINE SYMBOL note_num = `($note_num"0") + 1`
+DEFINE SYMBOL note_($note_num)_lab =  ($prof_traj_shown) ($feature_type)($c_s), ($ngood_data) points shown
+IF `(($its_prop_plot"0|0|1|*>1") EQ 0) AND ($nbad_data"0|0|*>1")` THEN 
+   IF `($ngood_data) NE 0` THEN DEFINE SYMBOL plusmissing = (plus ($nbad_data) missing)
+   IF `($ngood_data) EQ 0` THEN DEFINE SYMBOL plusmissing = (($nbad_data) missing)
+   DEFINE SYMBOL note_($note_num)_lab = ($prof_traj_shown) ($feature_type)($c_s), ($ngood_data) points shown ($plusmissing)
+ENDIF
+
+! If the constraint was where the color variable is valid, then no need for (0 missing)
+
+IF `($has_missing"0|0>1|*>0") AND ($nbad_data"1|0>1|*>0")` THEN \
+ DEFINE SYMBOL note_($note_num)_lab = ($prof_traj_shown) ($feature_type)($c_s), ($ngood_data) points shown
+
+! Notation about the decimation
+IF `($piecewise_decimation"0|*>1") AND ($ngood_data) GT 0` THEN 
+
+   LET approx_total = ($ngood_data)/($decimation_fraction)
+   LET approx_miss  = ($nbad_data)/($decimation_fraction)
+list approx_total, approx_miss
+   IF `approx_total GT 1.e6` THEN 
+      DEFINE SYMBOL approx_msg = `approx_total/1.e6,prec=2` million obs
+      IF `approx_miss GT 0` THEN DEFINE SYMBOL approx_msg = ($approx_msg) (plus `approx_miss/1.e6,prec=2` million missing)
+   ELIF `approx_total GT 1.e3` THEN 
+      DEFINE SYMBOL approx_msg = `approx_total/1.e3,prec=2` thousand obs 
+      IF `approx_miss GT 0` THEN DEFINE SYMBOL approx_msg = ($approx_msg) (plus `approx_miss/1.e3,prec=2` thousand missing)
+   ELSE
+      DEFINE SYMBOL approx_msg = `approx_total,prec=2` obs (plus `approx_miss,prec=2` missing)
+   ENDIF
+
+
+   DEFINE SYMBOL note_($note_num)_lab =  ($prof_traj_shown) ($feature_type)($c_s), approx. ($approx_msg)
+
+! Put a link to the doc containing description of the decimation scheme. 
+   DEFINE SYMBOL note_num = `($note_num"0") + 1`
+   DEFINE SYMBOL note_($note_num)_lab = Subsample of ($ngood_data) points shown (<a target=&quot;_blank&quot; href=doc/piecewise_decimation_reference.html>explanation</a>)
+
+ENDIF
+
+!---------------- end of feature_labels.jnl -------------------------
