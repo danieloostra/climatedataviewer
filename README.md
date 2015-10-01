@@ -27,20 +27,17 @@ The Climate Data Viewer was originally developed by the dedicated staff at the P
 - ant 1.8+ (if the Java code does not compile and you have the right JDK it's probably because your ant is old.)
 - Ferret 6.842 or higher with the etopo05.nc data set and the Ferret environment that goes with the release.
 
-<p class="documentDescription">First steps to installing LAS V8.x</p>
+#First steps to installing the CDV
 
-
-<div class="plain">
-
-<h2 class="Heading">Prerequisites<br /></h2>
-<h3 class="Subheading">You must have the following software installed before you install LAS v8.x<br /></h3>
+##Prerequisites
+###You must have the following software installed before you install
 <ol><li>Java<b> 1.6</b>+ (you need the full SE JDK not just the Run-time Environment (JRE).)<b>  We recommend Java 7. <br /></b></li><li>Tomcat v6.x or higher. <b>We recommend Tomcat 7.</b>  We are running all of our servers at Tomcat 7.<br /></li><li>TDS (The THREDDS Data Server) <b>4.2.5</b>+  You <b>must</b> use TDS <b>4</b>.  We do not recommend 4.3 yet due to problems with the NCML aggregations.<br /></li><li>ant 1.8+ (if the Java code does not compile and you have the right JDK it's probably because your ant is old.)<br /></li><li>Ferret<b> 6.842</b> or higher with <a href="ftp://ftp.pmel.noaa.gov/ferret/pub/data/etopo05.nc.Z">the etopo05.nc data set</a> and the Ferret environment that goes with the release.</li></ol>
-<br />
-<h2>Install Java 1.6+</h2>
+
+###Install Java 1.6+
 <h3>Read <a href="http://www.oracle.com/technetwork/java/javase/index-137561.html" target="_self">the documentation</a> for details.</h3>
 <ol><li>Go to <a href="http://www.oracle.com/technetwork/java/javase/overview/index.html" target="_self">oracle.com</a> to get Java 1.6.</li><li>Follow the instructions for the RPM or self-extracting binary installation as appropriate for your system.</li></ol>
-<br />
-<h2>Install Tomcat 6.x +<br /></h2>
+
+###Install Tomcat 6.x +
 <h3 class="Subheading">Here's a quick and dirty "how-to" for Tomcat (read <a href="http://tomcat.apache.org/tomcat-5.5-doc/index.html" target="_self">the documentation</a> for details).<br /></h3>
 <ol><li>Go to <a href="http://tomcat.apache.org/" target="_self">tomcat.apache.org</a> get the latest 6.x version.<br /></li><li>Follow the link on the left and download the "core" tar.gz file.</li><li>Explode the tomcat tar file into a directory of your choosing:<br />
 <pre> tar -xzf apache-tomcat-6.0.32.tar.gz</pre>
@@ -48,18 +45,19 @@ The Climate Data Viewer was originally developed by the dedicated staff at the P
 <pre>ln -s apache-tomcat-6.0.32/ tomcat</pre>
 </li><li>If the default port numbers are being used by some other application, you'll need to edit the <b>tomcat/conf/server.xml</b> file to change the three port numbers (the shutdown port, the HTTP Connector port, and the Connector/AJP port). You can also just comment out the AJP connector port since we don't use it in our set up.<br /><br />E.g.<br />
 <pre>&lt;Server port="<b>8005</b>" shutdown="SHUTDOWN"&gt;<br />...<br /> &lt;!-- Define a non-SSL HTTP/1.1 Connector on port 8080 --&gt;     <br /> &lt;Connector port="<b>8080</b>" maxHttpHeaderSize="8192"                <br />   maxThreads="150" minSpareThreads="25" maxSpareThreads="75"                <br />   enableLookups="false" redirectPort="8443" acceptCount="100"                <br />   connectionTimeout="20000" disableUploadTimeout="true" /&gt;<br />...<br /> &lt;!-- Define an AJP 1.3 Connector on port 8009 --&gt;<br /> &lt;!-- For the basic LAS installation this connector is not used and could be commented out. --&gt;     <br /> &lt;Connector port="<b>8009</b>"                <br />   enableLookups="false" redirectPort="8443" protocol="AJP/1.3" /&gt;</pre>
+
 That's it. Now remember the full path name of the directory where you installed your tomcat and the port number you selected for the HTTP Connector port. You'll need these in the LAS configure process.</li></ol>
-<h2>Install the THREDDS Data Server</h2>
-<h3>This is not hard, but there are a lot of steps you need to follow.</h3>
+###Install the THREDDS Data Server
+####This is not hard, but there are a lot of steps you need to follow.
 <p>Because of all the details needed to integrate TDS and LAS we've created <a title="Installing and integrating TDS with LAS." href="installing-and-integrating-tds-with-las">a separate page with instructions</a>.</p>
-<br />
-<h2>Install Ant 1.8+ <br /></h2>
+
+###Install Ant 1.8+
 <h3>This is very easy. The promise of "write once install anywhere in action".</h3>
 <ol><li>Check your version with ant -version</li><li>If it's old go to <a href="http://ant.apache.org/" target="_self">ant.apache.org</a>.</li><li>Look for the download link on the welcome page.</li><li>Expand the tar ball somewhere.</li><li>Set your path so that this installation appears in the path ahead of the old version you're trying to replace.</li></ol>
-<br />
-<h2>Install Ferret 6.842 or higher<br /></h2>
+
+###Install Ferret 6.842 or higher
 <ol><li>Download the appropriate package from the Ferret  <a href="http://ferret.pmel.noaa.gov/Ferret/downloads">downloads page</a>.</li><li>There is a <a href="http://ferret.pmel.noaa.gov/Ferret/downloads/ferret-installation-and-update-guide">detailed installation guide</a> and help from the <a href="http://ferret.pmel.noaa.gov/Ferret/email-users-group">mailing list</a>.</li>
 <ul><li>N.B. You also need the Ferret environment that goes with this release.<br /></li></ul>
 <li>You also need to install the etopo05.nc data set in your FER_DATA directory since this version of LAS depends on this file for computing masks for user defined variables. The example configuration also includes a new dataset, ocean_atlas_subset.nc, a 4-Dimensional dataset for demonstrating LAS capabilities. Both of these files are in the Ferret datasets tar file listed on the Ferret downloads pages. Download the Ferret datasets tar file and install the data to update your installation.</li></ol>
 
-</div>
+
