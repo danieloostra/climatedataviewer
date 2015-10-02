@@ -1,5 +1,5 @@
 
-#Climate DATA Viewer(CDV)  - Data Viz 
+#Climate DATA Viewer (CDV)  - Data Viz 
 
 ##Why support this project?
 
@@ -22,7 +22,7 @@ Recent developments have forced individual users to introduce the CDV (also know
 The Climate Data Viewer was originally developed by the dedicated staff at the PMEL – Pacific Marine Environmental Lab, with all credit going to them for the initial, current, and on-going development. I’ve been in close contact with lead developer at PMEL, and we will share any concrete developments with the team at PMEL for evaluation and feedback.
 
 ##Requirements
-###You must have the following software installed before you install LAS v8.x
+###You must have the following software installed before you install CDV.
 - Java 1.6+ (you need the full SE JDK not just the Run-time Environment (JRE).)  We recommend Java 7. 
 - Tomcat v6.x or higher. We recommend Tomcat 7.  We are running all of our servers at Tomcat 7.
 - T DS (The THREDDS Data Server) 4.2.5+  You must use TDS 4.  We do not recommend 4.3 yet due to problems with the NCML aggregations.
